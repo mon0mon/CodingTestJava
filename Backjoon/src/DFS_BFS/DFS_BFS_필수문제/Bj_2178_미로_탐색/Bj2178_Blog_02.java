@@ -1,4 +1,4 @@
-package DFS_BFS.Bj_2178_미로_탐색;
+package DFS_BFS.DFS_BFS_필수문제.Bj_2178_미로_탐색;
 
 import java.io.BufferedReader;
 import java.io.IOException;
