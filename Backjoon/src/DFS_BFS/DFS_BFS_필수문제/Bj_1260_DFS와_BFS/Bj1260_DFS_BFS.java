@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 public class Bj1260_DFS_BFS {
     //  그래프를 DFS와 BFS로 탐색한 결과를 출력하는 프로그램 작성
     //  DFS는 Stack, BFS는 Queue 사용
-    //  @Todo ArrayList<LinkedList>는 너무 복잡한듯... 다시 구상하기
+    //  RETRY ArrayList<LinkedList>는 너무 복잡한듯... 다시 구상하기
     static Stack<Integer> stack = new Stack<>();
     static ArrayList<LinkedList<Integer>> list;
     static int startNode;
