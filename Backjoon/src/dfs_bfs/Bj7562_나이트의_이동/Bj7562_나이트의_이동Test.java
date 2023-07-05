@@ -1,4 +1,4 @@
-package queue;
+package dfs_bfs.Bj7562_나이트의_이동;
 
 import static org.junit.jupiter.api.Assertions.*;
 

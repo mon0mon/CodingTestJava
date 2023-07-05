@@ -4,7 +4,7 @@
  * @since 2023-06-21 0021 : AM 3:38
  */
 
-package queue;
+package dfs_bfs.Bj7562_나이트의_이동;
 
 import java.io.BufferedReader;
 import java.io.IOException;

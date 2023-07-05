@@ -1,4 +1,4 @@
-package DFS_BFS.DFS_BFS_필수문제.Bj_1260_DFS와_BFS;
+package dfs_bfs.Bj_1260_DFS와_BFS;
 
 
 import java.io.BufferedReader;

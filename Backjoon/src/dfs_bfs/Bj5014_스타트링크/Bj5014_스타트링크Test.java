@@ -1,4 +1,4 @@
-package queue;
+package dfs_bfs.Bj5014_스타트링크;
 
 import static org.junit.jupiter.api.Assertions.*;
 

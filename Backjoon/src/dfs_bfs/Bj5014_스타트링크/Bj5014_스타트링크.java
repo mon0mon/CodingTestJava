@@ -4,7 +4,7 @@
  * @since 2023-06-21 0021 : AM 3:38
  */
 
-package queue;
+package dfs_bfs.Bj5014_스타트링크;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
