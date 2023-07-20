@@ -18,44 +18,45 @@ public class Bj2606 {
         System.out.println(new Bj2606().solution());
     }
     
-    public int solution() throws IOException {
+    public long solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int computerCount = Integer.parseInt(br.readLine());
-        int mappingCount = Integer.parseInt(br.readLine());
+        int totalComputerCount = Integer.parseInt(br.readLine());
+        int connectedComputerCount = Integer.parseInt(br.readLine());
 
-        List<LinkedList<Integer>> map = new ArrayList<>();
+        int[][] adjList = new int[totalComputerCount+1][totalComputerCount+1];
+        for (int i = 0; i < connectedComputerCount; i++) {
+            int[] edge = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
 
-        for (int i = 0; i < computerCount + 1; i++) {
-            map.add(new LinkedList<>());
+            adjList[edge[0]][edge[1]] = 1;
+            adjList[edge[1]][edge[0]] = 1;
         }
+        boolean[] infestedComputer = new boolean[totalComputerCount+1];
 
-        for (int i = 0; i < mappingCount; i++) {
-            StringTokenizer mapTokenizer = new StringTokenizer(br.readLine());
-            int virusedComputer = Integer.parseInt(mapTokenizer.nextToken());
-            int connectedComputer = Integer.parseInt(mapTokenizer.nextToken());
-
-            map.get(virusedComputer).add(connectedComputer);
-        }
-
-        Queue<Integer> queue = new LinkedList<>();
-        boolean[] checkedComputer = new boolean[computerCount+1];
-        queue.add(1);
-        int virusedComputerCount = 0;
-        checkedComputer[1] = true;
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(1);
 
         while (!queue.isEmpty()) {
-            int currentComputer = queue.poll();
+            int index = queue.poll();
 
-            LinkedList<Integer> connectedComputer = map.get(currentComputer);
-            for (Integer computer : connectedComputer) {
-                if (!checkedComputer[computer]) {
-                    queue.add(computer);
-                    checkedComputer[computer] = true;
-                    virusedComputerCount++;
+            infestedComputer[index] = true;
+
+            for (int i = 1; i < totalComputerCount + 1; i++) {
+                if (adjList[index][i] == 1 && !infestedComputer[i]) {
+                    queue.offer(i);
                 }
             }
         }
 
-        return virusedComputerCount;
+        //  시작점인 1번 컴퓨터는 제외하는 의미에서 -1
+        int res = -1;
+        for (int i = 0; i < infestedComputer.length; i++) {
+            if (infestedComputer[i]) {
+                res++;
+            }
+        }
+
+        return res;
     }
 }
