@@ -14,6 +14,7 @@ import java.util.*;
 //  단지번호붙이기
 //  https://www.acmicpc.net/problem/2667
 //  RETRY 틀린코드 (다시 풀어보기)
+//  DFS BFS로 다시 풀어보기
 public class Bj2667_단지번호붙이기 {
 
 /*
@@ -27,6 +28,13 @@ public class Bj2667_단지번호붙이기 {
 0111000
  */
     private int size;
+    private int map[][];
+    private boolean visited[][];
+    private int[] dx = {1, -1, 0, 0};
+    private int[] dy = {0, 0, 1, -1};
+    private int count;
+    private int number;
+    private PriorityQueue<Integer> pQueue = new PriorityQueue<>();
 
     public static void main(String[] args) throws IOException {
         System.out.println(new Bj2667_단지번호붙이기().solution());
@@ -34,66 +42,54 @@ public class Bj2667_단지번호붙이기 {
 
     public String solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
         size = Integer.parseInt(br.readLine());
-        int[][] map = new int[size][size];
-        boolean[][] visited = new boolean[size][size];
-        Queue<int[]> toVisit = new ArrayDeque<>();
+
+        map = new int[size][size];
+        visited = new boolean[size][size];
 
         for (int i = 0; i < size; i++) {
-            int[] houseToken = Arrays.stream(br.readLine().split(""))
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
+            String row = br.readLine();
             for (int j = 0; j < size; j++) {
-                map[i][j] = houseToken[j];
-                if (map[i][j] == 1) {
-                    toVisit.offer(new int[] {i, j, 1});
-                }
+                map[i][j] = row.charAt(j) - '0';
             }
         }
 
-        int houseComplex = 0;
-        int houseCount = 0;
-        int[] dx = new int[] {1, -1, 0, 0};
-        int[] dy = new int[] {0, 0, 1, -1};
-
-        PriorityQueue<Integer> pQueue = new PriorityQueue<>();
-        while (!toVisit.isEmpty()) {
-            int[] house = toVisit.poll();
-
-            if (visited[house[0]][house[1]]) {
-                continue;
-            }
-
-            if (house[2] == 1) {
-                if (houseCount != 0) {
-                    pQueue.offer(houseCount);
-                }
-                houseCount = 0;
-                houseComplex++;
-            }
-
-            visited[house[0]][house[1]] = true;
-
-            for (int i = 0; i < 4; i++) {
-                int nextY = house[0] + dy[i];
-                int nextX = house[1] + dx[i];
-
-                if (checkBoundary(nextY, nextX)
-                        && map[nextY][nextX] == 1
-                        && !visited[nextY][nextX]) {
-                    toVisit.offer(new int[] {nextY, nextX, house[2] + 1});
-                }
-            }
-        }
-
-        sb.append(houseComplex).append('\n');
         for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (!visited[i][j] && map[i][j] == 1) {
+                    count = 0;
+                    number++;
+                    dfs(i, j);
+                    pQueue.offer(count);
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(number).append('\n');
+        while (!pQueue.isEmpty()) {
             sb.append(pQueue.poll()).append('\n');
         }
 
         return sb.toString();
+    }
+
+    private void dfs(int y, int x) {
+        visited[y][x] = true;
+        map[y][x] = number;
+        count++;
+
+        for (int i = 0; i < 4; i++) {
+            int nextY = dy[i] + y;
+            int nextX = dx[i] + x;
+
+            if (checkBoundary(nextY, nextX)
+                    && !visited[nextY][nextX]
+                    && map[nextY][nextX] == 1) {
+                map[nextY][nextX] = number;
+                dfs(nextY, nextX);
+            }
+        }
     }
 
     private boolean checkBoundary(int y, int x) {
