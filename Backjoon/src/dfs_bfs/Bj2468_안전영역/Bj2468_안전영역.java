@@ -13,78 +13,61 @@ import java.util.*;
 
 //  안전영역
 //  https://www.acmicpc.net/problem/2468
-//  RETRY 다시 풀어보기
 public class Bj2468_안전영역 {
-    private int size;
+
     private int[][] map;
     private boolean[][] visited;
-    private int safeAreaCount = 0;
+    private int maxHeight;
+    private int size;
+    private int areaCount;
+    private PriorityQueue<Integer> pQueue = new PriorityQueue<>(Collections.reverseOrder());
     private int[] dx = {1, -1, 0, 0};
     private int[] dy = {0, 0, 1, -1};
-
-/*
-5
-6 8 2 6 2
-3 2 3 4 6
-6 7 3 3 2
-7 2 5 3 6
-8 9 5 2 7
- */
-
-/*
-7
-9 9 9 9 9 9 9
-9 2 1 2 1 2 9
-9 1 8 7 8 1 9
-9 2 7 9 7 2 9
-9 1 8 7 8 1 9
-9 2 1 2 1 2 9
-9 9 9 9 9 9 9
- */
 
     public static void main(String[] args) throws IOException {
         System.out.println(new Bj2468_안전영역().solution());
     }
-    
+
     public int solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         size = Integer.parseInt(br.readLine());
         map = new int[size][size];
-        visited = new boolean[size][size];
-        int maxHeight = 0;
+        maxHeight = 0;
 
         for (int i = 0; i < size; i++) {
-            StringTokenizer rowToken = new StringTokenizer(br.readLine());
+            int[] row = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
             for (int j = 0; j < size; j++) {
-                map[i][j] = rowToken.nextToken().charAt(0) - '0';
-                maxHeight = Math.max(maxHeight, map[i][j]);
+                if (row[j] > maxHeight) {
+                    maxHeight = row[j];
+                }
+
+                map[i][j] = row[j];
             }
         }
 
-
-        int maxSafeAreaCount = 0;
-        for (int i = 0; i <= Math.min(100, maxHeight); i++) {
+        for (int i = 0; i < maxHeight + 1; i++) {
+            areaCount = 0;
+            visited = new boolean[size][size];
             for (int j = 0; j < size; j++) {
                 for (int k = 0; k < size; k++) {
                     if (map[j][k] > i && !visited[j][k]) {
-                        bfs(new int[] {j, k, i});
-                        safeAreaCount++;
+                        bfs(j, k, i);
+                        areaCount++;
                     }
                 }
             }
-            maxSafeAreaCount = Math.max(maxSafeAreaCount, safeAreaCount);
-            safeAreaCount = 0;
-            visited = new boolean[size][size];
+            pQueue.offer(areaCount);
         }
 
-        return maxSafeAreaCount;
+        return pQueue.isEmpty() ? 1 : pQueue.poll();
     }
 
-    private void bfs(int[] start) {
+    private void bfs(int y, int x, int waterLevel) {
         Deque<int[]> queue = new ArrayDeque<>();
 
-        queue.offer(start);
-
+        queue.offer(new int[] {y, x});
         while (!queue.isEmpty()) {
             int[] position = queue.poll();
 
@@ -98,22 +81,19 @@ public class Bj2468_안전영역 {
                 int nextY = dy[i] + position[0];
                 int nextX = dx[i] + position[1];
 
-                if (checkBoundary(nextY, nextX)
-                        && !visited[nextY][nextX]
-                        && map[nextY][nextX] > position[2]
-                ) {
-                    queue.offer(new int[] {nextY, nextX, position[2]});
+                if (checkBoundary(nextY, nextX) && map[nextY][nextX] > waterLevel && !visited[nextY][nextX]) {
+                    queue.offer(new int[] {nextY, nextX});
                 }
             }
         }
     }
 
-    private boolean checkBoundary(int y, int x) {
-        if (y < 0 || y >= size) {
+    private boolean checkBoundary(int nextY, int nextX) {
+        if (0 > nextY || size <= nextY) {
             return false;
         }
 
-        if (x < 0 || x >= size) {
+        if (0 > nextX || size <= nextX) {
             return false;
         }
 

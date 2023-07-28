@@ -15,8 +15,6 @@ import java.util.PriorityQueue;
 
 //  단지번호붙이기
 //  https://www.acmicpc.net/problem/2667
-//  RETRY 틀린코드 (다시 풀어보기)
-//  DFS BFS로 다시 풀어보기
 public class Bj2667_단지번호붙이기_BFS {
 /*
 7
