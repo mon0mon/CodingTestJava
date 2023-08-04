@@ -34,6 +34,6 @@ public class Bj1629_곱셈 {
             return A;
         }
 
-        return A * recursive(A, count -1);
+        return A * recursive(A, count -1, C);
     }
 }
