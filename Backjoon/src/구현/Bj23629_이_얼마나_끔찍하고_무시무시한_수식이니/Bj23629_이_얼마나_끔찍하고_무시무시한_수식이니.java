@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+//  RETRY
 public class Bj23629_이_얼마나_끔찍하고_무시무시한_수식이니 {
     public static void main(String[] args) throws IOException {
         System.out.println(Bj23629_이_얼마나_끔찍하고_무시무시한_수식이니.solution());
